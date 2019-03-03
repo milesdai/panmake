@@ -29,6 +29,7 @@ void setup() {
   steppers.addStepper(stepper1);
   steppers.addStepper(stepper2);
   readyForInstruction();
+  pinMode(6, OUTPUT);
 }
 
 void loop() {
@@ -105,8 +106,13 @@ void executeInstruction() {
   Serial.println(positions[0]);
   Serial.print("Position 1 is: ");
   Serial.println(positions[1]);
+  if(currentInstruction[3] == 1) {
+    Serial.println(currentInstruction[3]);
+    analogWrite(6, 220);
+  }
   steppers.moveTo(positions);
   steppers.runSpeedToPosition(); // Blocks until all are in position
+  digitalWrite(6, LOW);
   delay(10); // can probably be removed
 }
 

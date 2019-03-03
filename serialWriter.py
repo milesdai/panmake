@@ -1,8 +1,8 @@
 import serial
 import time 
 
-PORT_NAME = '/dev/cu.usbmodem14401'
-#PORT_NAME = 'COM10'
+# PORT_NAME = '/dev/cu.usbmodem14401'
+PORT_NAME = 'COM10'
 X_LOW_LIMIT = 0
 Y_LOW_LIMIT = 0
 X_HIGH_LIMIT = 3000
@@ -46,20 +46,28 @@ def getCommand(filename):
         line_split = line.split()
         
         extruder = chr(ord(line_split[0])) #Converts single character string into character
-        x_val = int(line_split[1])
-        y_val = int(line_split[2])
-        if extruder == -1:
-            raise Exception
-        if x_val < X_LOW_LIMIT or x_val > X_HIGH_LIMIT:
-            raise Exception
-        if y_val < Y_LOW_LIMIT or y_val > Y_HIGH_LIMIT:
-            raise Exception
-        yield b'' + str(x_val).encode('utf-8') + b',' + str(y_val).encode('utf-8') +b',' + str(extruder).encode('utf-8')
+        if extruder == 'w':
+            time.sleep(25)
+        else:
+            x_val = int(line_split[1])
+            y_val = int(line_split[2])
+            if extruder == -1:
+                raise Exception
+            if x_val < X_LOW_LIMIT or x_val > X_HIGH_LIMIT:
+                raise Exception
+            if y_val < Y_LOW_LIMIT or y_val > Y_HIGH_LIMIT:
+                raise Exception
+            if extruder == 'm':
+                e = b'0'
+            else:
+                e = b'1'
+            # str(extruder).encode('utf-8')
+            yield b'' + str(int(1.25 * x_val)).encode('utf-8') + b',' + str(int(1.25*y_val)).encode('utf-8') +b',' + b'10,' + e + b'!'
         
             
             
-for command in getCommand("command_inputs.txt"):
+for command in getCommand("trace/square.txt"):
     print("Command is ", command)
     sendMessage(command)
     readMessage()
-    time.sleep(10)
+    time.sleep(1)

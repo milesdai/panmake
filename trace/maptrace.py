@@ -553,7 +553,7 @@ def get_options():
                         help='overwrite output')
 
     parser.add_argument('-g', '--grid-size', action='store_true',
-                        default=20, help='Set grid size of the pancake batter')
+                        default=25, help='Set grid size of the pancake batter')
 
     parser.add_argument('-I', '--image-size', action='store_true',
                         default=256, help='Set image size after rescaling')
