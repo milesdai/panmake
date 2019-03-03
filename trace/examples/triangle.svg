@@ -1,0 +1,8 @@
+<svg width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
+ <g stroke="#000" stroke-linejoin="bevel" stroke-width="1.0">
+  <g fill="#fff">
+   <path d="ZM28,192L172,193L111,39L28,192Z" stroke-width="0.0"/>
+   <path d="M28,192L111,39L172,193L28,192Z"/>
+  </g>
+<g fill="#ddd" fill-opacity="0.0"><path stroke="#ccc" stroke-opacity="0.3" stroke-linecap="round" stroke-width="20" d="M121.00,40.00 L102.00,40.00L109.00,60.00L110.00,60.00L99.00,80.00L117.00,80.00L125.00,100.00L88.00,100.00L77.00,120.00L133.00,120.00L141.00,140.00L66.00,140.00L55.00,160.00L149.00,160.00L157.00,180.00L45.00,180.00 "/> </g> </g>
+</svg>
