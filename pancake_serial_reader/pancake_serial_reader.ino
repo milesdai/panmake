@@ -7,7 +7,7 @@ AccelStepper stepper1(AccelStepper::FULL4WIRE, 2, 3, 4, 5);
 AccelStepper stepper2(AccelStepper::FULL4WIRE, 8, 9, 10, 11);
 MultiStepper steppers;
 
-const float DIST_PER_STEP = 0.01; // CALIBRATE THIS! - physical distance per step
+const float DIST_PER_STEP = 0.1; // CALIBRATE THIS! - physical distance per step
 
 int incomingByte = 0;
 const int CHAR_PER_INSTR = 50; // expect max 35 bytes + terminator
@@ -26,6 +26,7 @@ void setup() {
   stepper2.setMaxSpeed(100);
   steppers.addStepper(stepper1);
   steppers.addStepper(stepper2);
+  readyForInstruction();
 }
 
 void loop() {
@@ -34,6 +35,7 @@ void loop() {
   if(newInstruction) {
     executeInstruction();
     newInstruction = false;
+    readyForInstruction();
   }
   delay(5);
 }
@@ -52,6 +54,7 @@ void readInstruction() {
         if (i >=  CHAR_PER_INSTR) {
           i--;
           Serial.println("Error: Overflow");
+          Serial.flush();
         } // overflow condition
       } else {
         rxMessage[i] = '\0';
@@ -78,6 +81,7 @@ void parseInput() {
   while(token != NULL) {
     if (i > 3) {
       Serial.println("Bad input, too many delimiters");
+      Serial.flush();
       return 0;
     }
     currentInstruction[i] = atoi(token);
@@ -88,9 +92,9 @@ void parseInput() {
 }
 
 void executeInstruction() {
-  for(int i = 0; i < 4; i++)
-    Serial.print(currentInstruction[i]);
-  Serial.print("\n");
+//  for(int i = 0; i < 4; i++)
+//    Serial.print(currentInstruction[i]);
+//  Serial.print("\n");
 
   long positions[] = {currentInstruction[0] / DIST_PER_STEP, 
                       currentInstruction[1] / DIST_PER_STEP}; // Array of desired stepper positions
@@ -98,5 +102,10 @@ void executeInstruction() {
   steppers.moveTo(positions);
   steppers.runSpeedToPosition(); // Blocks until all are in position
   delay(10); // can probably be removed
+}
+
+void readyForInstruction() {
+  Serial.println(">");
+  delay(10);
 }
 
