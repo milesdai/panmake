@@ -7,7 +7,7 @@ AccelStepper stepper1(AccelStepper::FULL4WIRE, 2, 3, 4, 5);
 AccelStepper stepper2(AccelStepper::FULL4WIRE, 8, 9, 10, 11);
 MultiStepper steppers;
 
-const float DIST_PER_STEP = 0.1; // CALIBRATE THIS! - physical distance per step
+const float DIST_PER_STEP = 1; // CALIBRATE THIS! - physical distance per step
 
 int incomingByte = 0;
 const int CHAR_PER_INSTR = 50; // expect max 35 bytes + terminator
@@ -24,6 +24,8 @@ void setup() {
   
   stepper1.setMaxSpeed(100);
   stepper2.setMaxSpeed(100);
+  stepper1.setCurrentPosition(0);
+  stepper2.setCurrentPosition(0);
   steppers.addStepper(stepper1);
   steppers.addStepper(stepper2);
   readyForInstruction();
@@ -96,9 +98,13 @@ void executeInstruction() {
 //    Serial.print(currentInstruction[i]);
 //  Serial.print("\n");
 
-  long positions[] = {currentInstruction[0] / DIST_PER_STEP, 
-                      currentInstruction[1] / DIST_PER_STEP}; // Array of desired stepper positions
-
+  long positions[] = {currentInstruction[0], 
+                      currentInstruction[1]}; // Array of desired stepper positions
+  //steppers.moveTo(positions);
+  Serial.print("Position 0 is ");
+  Serial.println(positions[0]);
+  Serial.print("Position 1 is: ");
+  Serial.println(positions[1]);
   steppers.moveTo(positions);
   steppers.runSpeedToPosition(); // Blocks until all are in position
   delay(10); // can probably be removed
@@ -108,4 +114,3 @@ void readyForInstruction() {
   Serial.println(">");
   delay(10);
 }
-
